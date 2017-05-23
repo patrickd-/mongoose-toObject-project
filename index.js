@@ -154,10 +154,10 @@ function levelProject(obj, out, level, projection, minimizeOutput) {
 }
 
 /*
- * Mongoose ToObject level projection plugin
+ * Mongoose ToJSON level projection plugin
  */
 module.exports = exports = (schema, pluginOptions) => {
-  schema.static('toObjectOptionsExtend', options => Object.setPrototypeOf(options, schema.options.toObject));
+  schema.static('toJSONOptionsExtend', options => Object.setPrototypeOf(options, schema.options.toJSON));
 
   if (!pluginOptions.levels) {
     pluginOptions.levels = {};
@@ -200,7 +200,7 @@ module.exports = exports = (schema, pluginOptions) => {
     }
   });
 
-  schema.options.toObject = Object.assign(schema.options.toObject || {}, {
+  schema.options.toJSON = Object.assign(schema.options.toJSON || {}, {
     levels: pluginOptions.levels
   });
 
@@ -215,9 +215,9 @@ module.exports = exports = (schema, pluginOptions) => {
       if (doc &&
         doc.constructor &&
         doc.constructor.schema) {
-        if (doc.constructor.schema.options.toObject &&
-          doc.constructor.schema.options.toObject.levels) {
-          level = doc.constructor.schema.options.toObject.levels[level];
+        if (doc.constructor.schema.options.toJSON &&
+          doc.constructor.schema.options.toJSON.levels) {
+          level = doc.constructor.schema.options.toJSON.levels[level];
         } else {
           return {
             include: [],
@@ -240,13 +240,13 @@ module.exports = exports = (schema, pluginOptions) => {
       options && options.minimize);
   }
 
-  // Set schema toObject options
-  schema.options.toObject = schema.options.toObject || {};
+  // Set schema toJSON options
+  schema.options.toJSON = schema.options.toJSON || {};
 
-  var preTransform = schema.options.toObject.transform;
+  var preTransform = schema.options.toJSON.transform;
 
-  schema.options.toObject.transform = preTransform ? (doc, ret, options) => transform(doc, preTransform(doc, ret, options) || ret, options) : transform;
-  schema.options.toObject.level = pluginOptions.level; // set default level
+  schema.options.toJSON.transform = preTransform ? (doc, ret, options) => transform(doc, preTransform(doc, ret, options) || ret, options) : transform;
+  schema.options.toJSON.level = pluginOptions.level; // set default level
 
   /*
    * Returns simple schema object

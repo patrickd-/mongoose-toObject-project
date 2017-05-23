@@ -1,7 +1,7 @@
 {
-  "name": "mongoose-to-object-project",
+  "name": "mongoose-to-json-project",
   "version": "2.4.1",
-  "description": "Adds projection to toObject with predefined levels and level selector capabilitiy",
+  "description": "Adds projection to toJSON with predefined levels and level selector capabilitiy",
   "main": "index.js",
   "scripts": {
     "test": "mocha",
@@ -9,20 +9,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Faleij/mongoose-toObject-project.git"
+    "url": "git+https://github.com/patrickd-/mongoose-tojson-project.git"
   },
   "keywords": [
     "mongoose",
-    "toObject",
+    "toJSON",
     "projection",
     "mongodb"
   ],
-  "author": "Faleij",
+  "author": "patrickd-",
   "license": "LGPL-3.0",
   "bugs": {
-    "url": "https://github.com/Faleij/mongoose-toObject-project/issues"
+    "url": "https://github.com/patrickd-/mongoose-tojson-project/issues"
   },
-  "homepage": "https://github.com/Faleij/mongoose-toObject-project#readme",
+  "homepage": "https://github.com/patrickd-/mongoose-tojson-project#readme",
   "dependencies": {},
   "devDependencies": {
     "coveralls": "2.11.4",

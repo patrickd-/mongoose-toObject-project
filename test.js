@@ -37,7 +37,7 @@ const schema = mongoose.Schema({
 });
 
 let otherActive = true;
-schema.set('toObject', {
+schema.set('toJSON', {
   transform: (doc, ret) => {
     if (otherActive)
       ret.otherTransform = true;
@@ -233,7 +233,7 @@ describe('getPathAsLevel', function() {
 
 });
 
-describe('ToObject Project Single Level', function() {
+describe('toJSON Project Single Level', function() {
 
   let friend = new Model({
     username: 'Doe',
@@ -256,14 +256,14 @@ describe('ToObject Project Single Level', function() {
     data: []
   });
 
-  it('should respect existing toObject transform', () => {
-    let data = user.toObject();
+  it('should respect existing toJSON transform', () => {
+    let data = user.toJSON();
     otherActive = false;
     expect(data.otherTransform).to.be.ok();
   });
 
   it('level selector function should select level', function() {
-    let data = user.toObject({
+    let data = user.toJSON({
       user: user,
       // Set and override level selector.
       // A simple level selector based on user _id equality.
@@ -284,14 +284,14 @@ describe('ToObject Project Single Level', function() {
   });
 
   it('should be public by default', function() {
-    let data = user.toObject();
+    let data = user.toJSON();
     expect(data).to.eql({
       username: 'John'
     });
   });
 
   it('should not minimize', function() {
-    let data = user.toObject({
+    let data = user.toJSON({
       minimize: false,
       level: 'internal'
     });
@@ -299,7 +299,7 @@ describe('ToObject Project Single Level', function() {
   });
 
   it('should minimize', function() {
-    let data = user.toObject({
+    let data = user.toJSON({
       minimize: true,
       level: 'internal'
     });
@@ -307,7 +307,7 @@ describe('ToObject Project Single Level', function() {
   });
 
   it('should be private', function() {
-    let data = user.toObject({
+    let data = user.toJSON({
       level: 'private',
       minimize: true
     });
@@ -330,7 +330,7 @@ describe('ToObject Project Single Level', function() {
   });
 
   it('should be system', function() {
-    let data = user.toObject({
+    let data = user.toJSON({
       level: 'system',
       minimize: true
     });
@@ -358,7 +358,7 @@ describe('ToObject Project Single Level', function() {
   });
 
   it('should be be modified private', function() {
-    let data = user.toObject({
+    let data = user.toJSON({
       level: 'private',
       projection: '-username -friend -deep',
       minimize: true
@@ -370,7 +370,7 @@ describe('ToObject Project Single Level', function() {
   });
 
   it('public should not include password even if asked to', function() {
-    let data = user.toObject({
+    let data = user.toJSON({
       level: 'public',
       projection: 'password',
       minimize: true
@@ -381,7 +381,7 @@ describe('ToObject Project Single Level', function() {
   });
 
   it('no level should equal public', function() {
-    let data = user.toObject({
+    let data = user.toJSON({
       minimize: true
     });
     expect(data).to.eql({
@@ -390,7 +390,7 @@ describe('ToObject Project Single Level', function() {
   });
 
   it('only username should exist', function() {
-    let data = user.toObject({
+    let data = user.toJSON({
       projection: 'username'
     });
     expect(data).to.eql({
@@ -399,12 +399,12 @@ describe('ToObject Project Single Level', function() {
   });
 
   it('systemField should not exist', function() {
-    let data = user.toObject();
+    let data = user.toJSON();
     expect(data).to.not.have.key('systemField');
   });
 
   it('systemField should exist', function() {
-    let data = user.toObject({
+    let data = user.toJSON({
       level: 'system',
       minimize: true
     });
@@ -412,20 +412,20 @@ describe('ToObject Project Single Level', function() {
   });
 
   it('groups should not exist', function() {
-    let data = user.toObject();
+    let data = user.toJSON();
     expect(data).to.not.have.key('groups');
   });
 
   it('groups should exist', function() {
-    let data = user.toObject({
+    let data = user.toJSON({
       level: 'internal',
       minimize: true
     });
     expect(data).to.have.key('groups');
   });
 
-  describe('toObjectOptionsExtend', function() {
-    let data = Model.toObjectOptionsExtend({
+  describe('toJSONOptionsExtend', function() {
+    let data = Model.toJSONOptionsExtend({
       name: 'Doe'
     });
 
@@ -439,7 +439,7 @@ describe('ToObject Project Single Level', function() {
   });
 });
 
-describe('ToObject Project MultiLevel', function() {
+describe('toJSON Project MultiLevel', function() {
   let user = new Model({
     username: 'John',
     name: 'John Jhonsson',
@@ -459,14 +459,14 @@ describe('ToObject Project MultiLevel', function() {
   });
 
   it('should be public by default', function() {
-    let data = user.toObject();
+    let data = user.toJSON();
     expect(data).to.eql({
       username: 'John'
     });
   });
 
   it('should be private', function() {
-    let data = user.toObject({
+    let data = user.toJSON({
       level: 'private',
       minimize: true
     });
@@ -489,7 +489,7 @@ describe('ToObject Project MultiLevel', function() {
   });
 
   it('deep should not exist', function() {
-    let data = user.toObject({
+    let data = user.toJSON({
       level: 'private',
       projection: '-deep',
       minimize: true
@@ -502,7 +502,7 @@ describe('ToObject Project MultiLevel', function() {
   });
 
   it('deep.c.a should be undefined', function() {
-    let data = user.toObject({
+    let data = user.toJSON({
       level: 'private',
       projection: '-deep.c.a',
       minimize: true
@@ -563,7 +563,7 @@ describe('Child inclusion overrides parent exclusion', function() {
           child0: 'data1'
         }
       }
-    }).toObject();
+    }).toJSON();
     expect(data).to.have.property('parent');
     expect(data.parent).to.not.have.property('child0');
     expect(data.parent).to.have.property('child1');
@@ -667,7 +667,7 @@ describe('Errors', function() {
     let Model0 = mongoose.model(Date.now().toString(), schema0);
 
     try {
-      new Model0({}).toObject();
+      new Model0({}).toJSON();
     } catch (err) {
       error = err;
     }
