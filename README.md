@@ -24,7 +24,9 @@ schema.plugin(require('mongoose-to-json-project'), {
     // system level
     system: ''
   },
-  // (optional) default level as a String
+  // (optional) default field schema level as a String
+  defaultFieldLevel: 'system',
+  // (optional) default toJSON() level as a String
   level: 'public',
   //  or a synchronous level selector function (preferred method).
   // All transform options are passed on to level selector functions,

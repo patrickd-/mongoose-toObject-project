@@ -170,6 +170,9 @@ module.exports = exports = (schema, pluginOptions) => {
 
   // Support schemaType level option
   schema.eachPath((pathName, schemaType) => {
+    if (pluginOptions.defaultFieldLevel && !schemaType.options.level) {
+      schemaType.options.level = pluginOptions.defaultFieldLevel;
+    }
     if (schemaType.options.level) {
       var levels = compileProjectionStringToArray(schemaType.options.level);
 
